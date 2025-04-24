@@ -11,5 +11,9 @@ spring:
     password: 3271149877mm
 #????
 mybatis-plus:
-  configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  type-aliases-package: com.mis.entity # ?????
+
+logging:
+  level:
+    com.mis: debug
+
