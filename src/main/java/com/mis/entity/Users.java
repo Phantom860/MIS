@@ -16,13 +16,13 @@ public class Users implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "user_id", type = IdType.AUTO)
-    private Long user_id;
+    private Long userId;
 
     private String username;
 
     private String password;
 
-    private String role; // 使用枚举建议也可以自定义枚举类型
+    private Role role;
 
 }
 

@@ -63,6 +63,11 @@ public class StudentsController {
         return Result.ok("删除成功") ;
     }
 
+    /**
+     * 更新学生信息
+     * @param student 学生数据
+     * @return 无
+     */
     @PutMapping("/update")
     public Result updateStudent(@RequestBody Students student) {
         log.info("更新学生：{}", student);

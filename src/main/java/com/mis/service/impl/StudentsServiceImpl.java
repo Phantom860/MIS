@@ -36,8 +36,4 @@ public class StudentsServiceImpl extends ServiceImpl<StudentsMapper, Students> i
         return studentsMapper.deleteById(id) > 0;
     }
 
-    public boolean updateById(Students student) {
-        return studentsMapper.updateById(student) > 0;
-    }
-
 }

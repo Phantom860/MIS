@@ -23,5 +23,4 @@ public interface StudentsService extends IService<Students> {
      */
     boolean deleteById(Long id);
 
-    boolean updateById(Students student);
 }
