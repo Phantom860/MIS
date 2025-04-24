@@ -10,7 +10,7 @@ import org.apache.ibatis.annotations.Mapper;
  *  Mapper 接口
  * </p>
  *
- * @author yourname
+ * @author Phantom
  * @since 2025-04-23
  */
 public interface StudentsMapper extends BaseMapper<Students> {

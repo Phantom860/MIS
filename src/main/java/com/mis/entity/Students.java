@@ -23,8 +23,8 @@ public class Students implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "student_id", type = IdType.ASSIGN_ID)
-    private String studentId;
+    @TableId(value = "student_id", type = IdType.INPUT)
+    private Long studentId;
 
     private String name;
 
@@ -34,6 +34,6 @@ public class Students implements Serializable {
 
     private Integer entranceYear;
 
-
+    private String className;
 }
 

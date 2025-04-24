@@ -9,7 +9,9 @@ spring:
     url: jdbc:mysql://localhost:3306/mis?serverTimezone=GMT%2b8
     username: root
     password: 3271149877mm
-#????
+  jackson:
+    default-property-inclusion: non_null # JSON?????????
+
 mybatis-plus:
   type-aliases-package: com.mis.entity # ?????
 

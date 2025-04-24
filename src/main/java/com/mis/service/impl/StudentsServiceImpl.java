@@ -24,7 +24,20 @@ public class StudentsServiceImpl extends ServiceImpl<StudentsMapper, Students> i
 
     @Override
     @Transactional
-    public Students getByStudentId(String id) {
+    /*
+     * 根据id查询学生信息
+     */
+    public Students getByStudentId(long id) {
         return this.getById(id);
     }
+
+    @Override
+    public boolean deleteById(Long id) {
+        return studentsMapper.deleteById(id) > 0;
+    }
+
+    public boolean updateById(Students student) {
+        return studentsMapper.updateById(student) > 0;
+    }
+
 }

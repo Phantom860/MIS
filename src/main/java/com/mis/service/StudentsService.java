@@ -13,6 +13,15 @@ import com.mis.entity.Students;
  */
 public interface StudentsService extends IService<Students> {
 
+    /*
+     * 根据id查询学生信息
+     */
+    Students getByStudentId(long id);
 
-    Students getByStudentId(String id);
+    /*
+     * 根据id删除学生信息
+     */
+    boolean deleteById(Long id);
+
+    boolean updateById(Students student);
 }
