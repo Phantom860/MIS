@@ -35,7 +35,10 @@ public class StudentsController {
      * @return 学生id
      */
     @PostMapping("/add")
-    public Result addStudent(@RequestBody Students student) {
+    public Result addStudent(@RequestBody Students student, HttpServletRequest request) {
+        if (!PermissionChecker.isAdmin(request)) {
+            return Result.fail("权限不足：仅管理员可添加学生");
+        }
         log.info("新增学生：{}", student);
         studentsService.save(student);
         // 返回学生id
@@ -63,6 +66,7 @@ public class StudentsController {
      */
     @DeleteMapping("/delete/{studentId}")
     public Result deleteStudent(@PathVariable Long studentId, HttpServletRequest request) {
+        log.info("根据id删除学生信息：{}",studentId);
         // 权限检查：只有管理员能删
         if (!PermissionChecker.isAdmin(request)) {
             return Result.fail("权限不足：仅管理员可删除学生");
@@ -77,15 +81,23 @@ public class StudentsController {
     }
 
     /**
-     * 更新学生信息
+     * 修改学生信息
      * @param student 学生数据
      * @return 无
      */
     @PutMapping("/update")
-    public Result updateStudent(@RequestBody Students student) {
-        log.info("更新学生：{}", student);
-        studentsService.updateById(student);
-        return Result.ok("更新成功");
+    public Result updateStudent(@RequestBody Students student, HttpServletRequest request) {
+        // 权限检查
+        if (!PermissionChecker.isAdmin(request)) {
+            return Result.fail("权限不足：仅管理员可修改学生信息");
+        }
+        log.info("修改学生：{}", student);
+        boolean success = studentsService.updateById(student);
+        if (success) {
+            return Result.ok("更新成功");
+        } else {
+            return Result.fail("更新失败，学生可能不存在");
+        }
     }
 
     /**
