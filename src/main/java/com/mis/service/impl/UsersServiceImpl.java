@@ -7,6 +7,8 @@ import com.mis.dto.UserDTO;
 import com.mis.entity.Users;
 import com.mis.mapper.UsersMapper;
 import com.mis.service.UsersService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +27,7 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
     private UsersMapper usersMapper;
 
     @Override
-    public Result login(LoginDTO loginDTO) {
+    public Result login(LoginDTO loginDTO, HttpServletRequest request) {
         // 1. 根据用户名查询用户信息
         Users user = usersMapper.selectByUsername(loginDTO.getUsername());
 
@@ -39,6 +41,9 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
         userDTO.setUserId(user.getUserId());
         userDTO.setUsername(user.getUsername());
         userDTO.setRole(user.getRole().name());
+
+        // ✅ 4. 将登录用户信息保存到 session 中（特别是 role）
+        request.getSession().setAttribute("user", userDTO);
 
         return Result.ok(userDTO);
     }

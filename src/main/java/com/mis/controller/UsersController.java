@@ -5,6 +5,7 @@ import com.mis.dto.Result;
 import com.mis.dto.UserDTO;
 import com.mis.entity.Users;
 import com.mis.service.UsersService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -32,8 +33,8 @@ public class UsersController {
      * @return 登录结果
      */
     @PostMapping("/login")
-    public Result login(@RequestBody LoginDTO loginDTO) {
-        return usersService.login(loginDTO);
+    public Result login(@RequestBody LoginDTO loginDTO, HttpServletRequest request) {
+        return usersService.login(loginDTO, request);
     }
 
 }

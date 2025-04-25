@@ -42,17 +42,33 @@ public class StudentsServiceImpl extends ServiceImpl<StudentsMapper, Students> i
         return this.getById(id);
     }
 
+    @Override
+    public List<StudentCourseDTO> getStudentWithCourses(Long studentId, String name) {
+        return studentsMapper.queryStudentCourse(studentId, name);
+    }
+
     /*
      * 根据id删除学生信息
      */
     @Override
-    public boolean deleteById(Long id) {
-        return studentsMapper.deleteById(id) > 0;
-    }
+    public boolean deleteStudentById(Long studentId) {
+        try {
+            // 先检查学生是否存在
+            if (studentsMapper.selectById(studentId) == null) {
+                return false;  // 如果学生不存在，返回 false
+            }
 
-    @Override
-    public List<StudentCourseDTO> getStudentWithCourses(Long studentId, String name) {
-        return studentsMapper.queryStudentCourse(studentId, name);
+            // 先删除选课信息（虽然数据库已经设置了级联删除，但可以先删除选课信息确保删除成功）
+            courseChoosingMapper.deleteByStudentId(studentId);
+
+            // 再删除学生信息
+            studentsMapper.deleteById(studentId);
+
+            return true;
+        } catch (Exception e) {
+            // 记录日志或进一步处理异常
+            return false;
+        }
     }
 
 }

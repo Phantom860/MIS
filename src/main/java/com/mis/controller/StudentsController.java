@@ -4,6 +4,8 @@ import com.mis.dto.Result;
 import com.mis.dto.StudentCourseDTO;
 import com.mis.entity.Students;
 import com.mis.service.StudentsService;
+import com.mis.utils.PermissionChecker;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -56,14 +58,22 @@ public class StudentsController {
 
     /**
      * 删除学生信息
-     * @param id 学生id
+     * @param studentId 学生id
      * @return 无
      */
-    @DeleteMapping("/delete/{id}")
-    public Result deleteStudent(@PathVariable Long id) {
-        log.info("删除学生，ID：{}", id);
-        studentsService.deleteById(id);
-        return Result.ok("删除成功") ;
+    @DeleteMapping("/delete/{studentId}")
+    public Result deleteStudent(@PathVariable Long studentId, HttpServletRequest request) {
+        // 权限检查：只有管理员能删
+        if (!PermissionChecker.isAdmin(request)) {
+            return Result.fail("权限不足：仅管理员可删除学生");
+        }
+
+        boolean success = studentsService.deleteStudentById(studentId);
+        if (success) {
+            return Result.ok("删除成功");
+        } else {
+            return Result.fail("删除失败，学生ID可能不存在");
+        }
     }
 
     /**

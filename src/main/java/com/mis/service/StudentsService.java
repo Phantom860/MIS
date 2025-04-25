@@ -22,12 +22,12 @@ public interface StudentsService extends IService<Students> {
     Students getByStudentId(long id);
 
     /*
-     * 根据id删除学生信息
-     */
-    boolean deleteById(Long id);
-
-    /*
      * 根据id或姓名查询学生信息
      */
     List<StudentCourseDTO> getStudentWithCourses(Long studentId, String name);
+
+    /*
+     * 删除学生信息
+     */
+    boolean deleteStudentById(Long studentId);
 }
