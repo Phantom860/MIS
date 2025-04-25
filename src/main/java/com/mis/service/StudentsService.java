@@ -1,7 +1,10 @@
 package com.mis.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.mis.dto.StudentCourseDTO;
 import com.mis.entity.Students;
+
+import java.util.List;
 
 /**
  * <p>
@@ -23,4 +26,8 @@ public interface StudentsService extends IService<Students> {
      */
     boolean deleteById(Long id);
 
+    /*
+     * 根据id或姓名查询学生信息
+     */
+    List<StudentCourseDTO> getStudentWithCourses(Long studentId, String name);
 }

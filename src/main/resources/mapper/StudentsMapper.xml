@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mis.mapper.StudentsMapper">
+
+    <select id="queryStudentCourse" resultType="com.mis.dto.StudentCourseDTO">
+        SELECT
+        s.student_id,
+        s.name,
+        s.sex,
+        s.entrance_age,
+        s.entrance_year,
+        s.class_name,
+
+        c.course_id,
+        c.name AS course_name,
+        c.teacher_id,
+        c.credit,
+        c.grade,
+        c.canceled_year,
+
+        cc.chosen_year,
+        cc.score
+
+        FROM students s
+        LEFT JOIN course_choosing cc ON s.student_id = cc.student_id
+        LEFT JOIN courses c ON cc.course_id = c.course_id
+        <where>
+            <if test="studentId != null">
+                s.student_id = #{studentId}
+            </if>
+            <if test="name != null and name != ''">
+                AND s.name LIKE CONCAT('%', #{name}, '%')
+            </if>
+        </where>
+    </select>
+
+</mapper>
+

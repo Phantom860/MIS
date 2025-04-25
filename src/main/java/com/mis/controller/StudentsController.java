@@ -1,11 +1,14 @@
 package com.mis.controller;
 
 import com.mis.dto.Result;
+import com.mis.dto.StudentCourseDTO;
 import com.mis.entity.Students;
 import com.mis.service.StudentsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 import static com.mis.dto.Result.ok;
 
@@ -75,5 +78,19 @@ public class StudentsController {
         return Result.ok("更新成功");
     }
 
+    /**
+     * 根据学生id或姓名查询学生信息和选课信息
+     * @param studentId 学生id
+     * @param name 学生姓名
+     * @return 学生信息和选课信息
+     */
+    @GetMapping("/course-info")
+    public Result queryStudentWithCourses(
+            @RequestParam(required = false) Long studentId,
+            @RequestParam(required = false) String name
+    ) {
+        List<StudentCourseDTO> result = studentsService.getStudentWithCourses(studentId, name);
+        return Result.ok(result);
+    }
 
 }

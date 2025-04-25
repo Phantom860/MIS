@@ -14,13 +14,10 @@ public class CourseChoosing implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId
     private Long studentId;
 
-    @TableId
     private Long courseId;
 
-    @TableId
     private Long teacherId;
 
     private Integer chosenYear;

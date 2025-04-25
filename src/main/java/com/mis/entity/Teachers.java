@@ -1,5 +1,6 @@
 package com.mis.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -17,6 +18,7 @@ public class Teachers implements Serializable {
     @TableId(value = "teacher_id")
     private Long teacherId;
 
-    private String name;
+    @TableField("name")
+    private String teacherName;
 }
 
