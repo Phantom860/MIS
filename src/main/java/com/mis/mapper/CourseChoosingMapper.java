@@ -11,4 +11,7 @@ public interface CourseChoosingMapper extends BaseMapper<CourseChoosing> {
 
     @Delete("DELETE FROM course_choosing WHERE student_id = #{studentId}")
     void deleteByStudentId(Long studentId);
+
+    @Delete("DELETE FROM course_choosing WHERE course_id = #{courseId}")
+    void deleteByCourseId(Long courseId);
 }
