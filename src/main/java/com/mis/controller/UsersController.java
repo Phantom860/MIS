@@ -7,10 +7,7 @@ import com.mis.entity.Users;
 import com.mis.service.UsersService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * <p>
@@ -38,6 +35,5 @@ public class UsersController {
     public Result login(@RequestBody LoginDTO loginDTO) {
         return usersService.login(loginDTO);
     }
-
 
 }
