@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mis.mapper.TeachersMapper">
+
+    <select id="queryTeacherCourses" resultType="com.mis.dto.TeacherCourseDTO">
+        SELECT
+        t.teacher_id,
+        t.name AS teacherName,
+        c.course_id,
+        c.name AS courseName,
+        c.credit,
+        c.grade,
+        c.canceled_year
+        FROM teachers t
+        LEFT JOIN courses c ON t.teacher_id = c.teacher_id
+        <where>
+            <if test="teacherId != null">
+                t.teacher_id = #{teacherId}
+            </if>
+            <if test="teacherName != null">
+                AND t.name LIKE CONCAT('%', #{teacherName}, '%')
+            </if>
+            <if test="courseId != null">
+                AND c.course_id = #{courseId}
+            </if>
+        </where>
+    </select>
+
+</mapper>
+
