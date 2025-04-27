@@ -4,6 +4,8 @@ import com.mis.dto.Result;
 import com.mis.dto.TeacherCourseDTO;
 import com.mis.entity.Teachers;
 import com.mis.service.TeachersService;
+import com.mis.utils.PermissionChecker;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,13 +20,17 @@ public class TeachersController {
     @Autowired
     private TeachersService teachersService;
 
+
     /**
      * 添加教师信息
      * @param teachers 课程数据
      * @return 课程id
      */
     @PostMapping("/add")
-    public Result addTeacher(@RequestBody Teachers teachers) {
+    public Result addTeacher(@RequestBody Teachers teachers, HttpServletRequest request) {
+        if (!PermissionChecker.isAdmin(request)) {
+            return Result.fail("权限不足：仅管理员可添加教师");
+        }
         log.info("新增教师：{}", teachers);
         teachersService.save(teachers);
         return Result.ok(teachers.getTeacherId());
@@ -45,4 +51,40 @@ public class TeachersController {
         List<TeacherCourseDTO> result = teachersService.queryTeacherCourses(teacherId, teacherName, courseId);
         return Result.ok(result);
     }
+
+    /**
+     * 删除教师信息
+     * @param teacherId 教师ID
+     * @return 删除结果
+     */
+    @DeleteMapping("/delete/{teacherId}")
+    public Result deleteTeacher(@PathVariable Long teacherId, HttpServletRequest request) {
+        // 权限校验
+        if (!PermissionChecker.isAdmin(request)) {
+            return Result.fail("权限不足：仅管理员可删除教师");
+        }
+        log.info("根据id删除学生信息：{}",teacherId);
+        return teachersService.deleteTeacherById(teacherId);
+    }
+
+    /**
+     * 修改教师信息
+     * @param teacher 教师信息
+     * @return 修改结果
+     */
+    @PutMapping("/update")
+    public Result updateTeacher(@RequestBody Teachers teacher, HttpServletRequest request) {
+        // 权限检查
+        if (!PermissionChecker.isAdmin(request)) {
+            return Result.fail("权限不足：仅管理员可修改教师信息");
+        }
+        log.info("修改教师信息：{}", teacher);
+        boolean success = teachersService.updateById(teacher);
+        if (success) {
+            return Result.ok("更新成功");
+        } else {
+            return Result.fail("更新失败，教师可能不存在");
+        }
+    }
+
 }
