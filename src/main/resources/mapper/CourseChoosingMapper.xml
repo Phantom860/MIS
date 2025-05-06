@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mis.mapper.CourseChoosingMapper">
+    <update id="updateCourseChoosing">
+        UPDATE course_choosing
+        SET
+        <if test="chosenYear != null">
+            chosen_year = #{chosenYear},
+        </if>
+        <if test="score != null">
+            score = #{score},
+        </if>
+        teacher_id = teacher_id <!-- 防止最后逗号错误，用自赋值 -->
+        WHERE student_id = #{studentId}
+        AND course_id = #{courseId}
+        AND teacher_id = #{teacherId}
+    </update>
+
+
+    <select id="queryCourseChoosing" resultType="com.mis.dto.CourseChoosingDTO">
+        SELECT cc.student_id, s.name AS student_name,
+        cc.course_id, c.name AS course_name,
+        cc.teacher_id, t.name AS teacher_name,
+        cc.chosen_year, cc.score
+        FROM course_choosing cc
+        JOIN students s ON cc.student_id = s.student_id
+        JOIN courses c ON cc.course_id = c.course_id
+        JOIN teachers t ON cc.teacher_id = t.teacher_id
+        WHERE 1=1
+        <if test="studentId != null">
+            AND cc.student_id = #{studentId}
+        </if>
+        <if test="studentName != null and studentName != ''">
+            AND s.name LIKE CONCAT('%', #{studentName}, '%')
+        </if>
+        <if test="courseId != null">
+            AND cc.course_id = #{courseId}
+        </if>
+        <if test="courseName != null and courseName != ''">
+            AND c.name LIKE CONCAT('%', #{courseName}, '%')
+        </if>
+    </select>
+
+</mapper>

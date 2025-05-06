@@ -3,7 +3,6 @@ package com.mis.service.impl;
 import com.mis.dto.StudentCourseDTO;
 import com.mis.entity.Students;
 import com.mis.mapper.CourseChoosingMapper;
-import com.mis.mapper.CoursesMapper;
 import com.mis.mapper.StudentsMapper;
 import com.mis.service.StudentsService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -29,9 +28,6 @@ public class StudentsServiceImpl extends ServiceImpl<StudentsMapper, Students> i
 
     @Autowired
     private CourseChoosingMapper courseChoosingMapper;
-
-    @Autowired
-    private CoursesMapper coursesMapper;
 
     @Override
     @Transactional
