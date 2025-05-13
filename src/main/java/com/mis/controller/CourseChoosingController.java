@@ -1,6 +1,7 @@
 package com.mis.controller;
 
 import com.mis.dto.CourseChoosingDTO;
+import com.mis.dto.CourseScoreStats;
 import com.mis.dto.Result;
 import com.mis.entity.CourseChoosing;
 import com.mis.service.CourseChoosingService;
@@ -8,6 +9,8 @@ import com.mis.utils.PermissionChecker;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,8 +35,7 @@ public class CourseChoosingController {
             return Result.fail("权限不足：仅管理员可插入选课信息");
         }
         log.info("新增选课信息：{}", courseChoosing);
-        courseChoosingService.addCourseChoosing(courseChoosing);
-        return Result.ok(courseChoosing.getCourseId());
+        return courseChoosingService.addCourseChoosing(courseChoosing);
     }
 
     /**
@@ -94,8 +96,9 @@ public class CourseChoosingController {
     public Result updateCourseChoosing(@RequestBody CourseChoosing courseChoosing, HttpServletRequest request) {
         String role = PermissionChecker.getRole(request);
 
-        if (PermissionChecker.isStudent(request)) {
-            return Result.fail("权限不足：学生无法修改选课信息");
+        // 只有教师可修改成绩
+        if (!"TEACHER".equals(role)) {
+            return Result.fail("权限不足：只有教师可以修改成绩信息");
         }
 
         log.info("更新选课信息：{}，操作人角色：{}", courseChoosing, role);
@@ -106,6 +109,16 @@ public class CourseChoosingController {
         } else {
             return Result.fail("更新失败：记录不存在或权限不足");
         }
+    }
+
+    /**
+     * 获取课程成绩统计
+     * @param courseId 课程id
+     * @return 课程成绩统计
+     */
+    @GetMapping("/{courseId}/score-stats")
+    public CourseScoreStats getCourseScoreStats(@PathVariable Long courseId) {
+        return courseChoosingService.getCourseScoreStats(courseId);
     }
 
 }

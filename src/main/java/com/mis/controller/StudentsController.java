@@ -3,6 +3,7 @@ package com.mis.controller;
 import com.mis.dto.Result;
 import com.mis.dto.StudentCourseDTO;
 import com.mis.entity.Students;
+import com.mis.entity.Teachers;
 import com.mis.service.StudentsService;
 import com.mis.utils.PermissionChecker;
 import jakarta.servlet.http.HttpServletRequest;
@@ -38,6 +39,11 @@ public class StudentsController {
     public Result addStudent(@RequestBody Students student, HttpServletRequest request) {
         if (!PermissionChecker.isAdmin(request)) {
             return Result.fail("权限不足：仅管理员可添加学生");
+        }
+        // 查询数据库，检查是否已存在该id
+        Students existingStudent = studentsService.getById(student.getStudentId());
+        if (existingStudent != null) {
+            return Result.fail("ID已存在，请重新添加");
         }
         log.info("新增学生：{}", student);
         studentsService.save(student);

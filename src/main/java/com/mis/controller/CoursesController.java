@@ -2,6 +2,7 @@ package com.mis.controller;
 
 import com.mis.dto.Result;
 import com.mis.entity.Courses;
+import com.mis.mapper.CoursesMapper;
 import com.mis.mapper.TeachersMapper;
 import com.mis.service.CoursesService;
 import com.mis.utils.CourseValidator;
@@ -30,6 +31,9 @@ public class CoursesController {
     @Autowired
     private TeachersMapper teachersMapper;
 
+    @Autowired
+    private CoursesMapper coursesMapper;
+
     /**
      * 添加课程信息
      * @param courses 课程数据
@@ -41,11 +45,13 @@ public class CoursesController {
         if (!PermissionChecker.isAdmin(request)) {
             return Result.fail("权限不足：仅管理员可添加课程信息");
         }
+
         // 调用工具类校验
-        Result validation = CourseValidator.validate(courses, teachersMapper);
+        Result validation = CourseValidator.validate(courses, teachersMapper, coursesMapper, true);
         if (!validation.getSuccess()) {
             return validation; // 校验失败时直接返回
         }
+
         log.info("新增课程：{}", courses);
         coursesService.save(courses);
         return Result.ok(courses.getCourseId());
@@ -107,7 +113,7 @@ public class CoursesController {
         }
 
         // 调用工具类校验
-        Result validation = CourseValidator.validate(course, teachersMapper);
+        Result validation = CourseValidator.validate(course, teachersMapper, coursesMapper, false);
         if (!validation.getSuccess()) {
             return validation; // 校验失败时直接返回
         }

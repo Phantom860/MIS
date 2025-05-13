@@ -2,6 +2,7 @@ package com.mis.utils;
 
 import com.mis.dto.Result;
 import com.mis.entity.Courses;
+import com.mis.mapper.CoursesMapper;
 import com.mis.mapper.TeachersMapper;
 
 import java.time.LocalDate;
@@ -13,9 +14,17 @@ public class CourseValidator {
      * @param teachersMapper 用于验证 teacherId 是否存在
      * @return 校验结果
      */
-    public static Result validate(Courses course, TeachersMapper teachersMapper) {
+    public static Result validate(Courses course,
+                                  TeachersMapper teachersMapper,
+                                  CoursesMapper coursesMapper,
+                                  boolean isAdd) {
+
         if (course.getCourseId() == null || String.valueOf(course.getCourseId()).length() != 7) {
             return Result.fail("课程ID必须为7位");
+        }
+
+        if (isAdd && coursesMapper.selectById(course.getCourseId()) != null) {
+            return Result.fail("ID已存在，请重新添加");
         }
 
         if (course.getCredit() == null || course.getCredit() < 0.5 || course.getCredit() > 10.0) {
@@ -33,4 +42,5 @@ public class CourseValidator {
 
         return Result.ok();
     }
+
 }

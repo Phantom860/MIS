@@ -28,11 +28,22 @@ public class TeachersController {
      */
     @PostMapping("/add")
     public Result addTeacher(@RequestBody Teachers teachers, HttpServletRequest request) {
+        // 检查权限，确保只有管理员可以添加教师
         if (!PermissionChecker.isAdmin(request)) {
             return Result.fail("权限不足：仅管理员可添加教师");
         }
+
         log.info("新增教师：{}", teachers);
+
+        // 查询数据库，检查是否已存在该 teacher_id
+        Teachers existingTeacher = teachersService.getById(teachers.getTeacherId());
+        if (existingTeacher != null) {
+            return Result.fail("ID已存在，请重新添加");
+        }
+
+        // 如果 teacher_id 不存在，则保存教师信息
         teachersService.save(teachers);
+
         return Result.ok(teachers.getTeacherId());
     }
 
@@ -63,7 +74,7 @@ public class TeachersController {
         if (!PermissionChecker.isAdmin(request)) {
             return Result.fail("权限不足：仅管理员可删除教师");
         }
-        log.info("根据id删除学生信息：{}",teacherId);
+        log.info("根据id删除老师信息：{}",teacherId);
         return teachersService.deleteTeacherById(teacherId);
     }
 
